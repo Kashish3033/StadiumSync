@@ -1,121 +1,66 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import React, { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Home, Map as MapIcon, Coffee } from 'lucide-react';
+import HomeScreen from './HomeScreen';
+import MapScreen from './MapScreen';
+import QueueScreen from './QueueScreen';
+import { useBackgroundTracking } from './useBackgroundTracking';
+import './index.css';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [activeTab, setActiveTab] = useState('home');
+  const [modalCtx, setModalCtx] = useState(null);
+  
+  const { isTrackingActive, toggleTracking, syncStatus } = useBackgroundTracking('user123');
+
+  const handleSetTab = (tab, ctx = null) => {
+    setModalCtx(ctx);
+    setActiveTab(tab);
+  };
+
+  const tabs = [
+    { id: 'home', label: 'Home', icon: Home },
+    { id: 'map', label: 'Venue Map', icon: MapIcon },
+    { id: 'queue', label: 'Food', icon: Coffee }
+  ];
+
+  const renderScreen = () => {
+    switch (activeTab) {
+      case 'home': return <HomeScreen setActiveTab={handleSetTab} userId="user123" ticketActive={isTrackingActive} setTicketActive={toggleTracking} syncStatus={syncStatus} key="home" />;
+      case 'map': return <MapScreen initialModal={modalCtx?.openModal} userId="user123" key="map" />;
+      case 'queue': return <QueueScreen userId="user123" key="queue" />;
+      default: return <HomeScreen setActiveTab={handleSetTab} userId="user123" ticketActive={isTrackingActive} setTicketActive={toggleTracking} syncStatus={syncStatus} key="home" />;
+    }
+  };
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className="flex flex-col min-h-screen bg-background text-white overflow-hidden pb-24">
+      <main className="flex-grow relative h-full">
+        <AnimatePresence mode="wait">
+          {renderScreen()}
+        </AnimatePresence>
+      </main>
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      {/* Bottom Navigation Bar */}
+      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white/5 backdrop-blur-xl border-t border-white/10 px-8 py-4 flex justify-between items-center rounded-t-[32px]">
+        {tabs.map(tab => {
+          const Icon = tab.icon;
+          const isActive = activeTab === tab.id;
+          return (
+            <motion.button
+              key={tab.id}
+              whileTap={{ scale: 0.85 }}
+              onClick={() => handleSetTab(tab.id)}
+              className={`flex flex-col items-center justify-center gap-1 w-16 h-12 transition-colors ${isActive ? 'text-primary' : 'text-gray-500 hover:text-white/80'}`}
+            >
+              <Icon size={24} strokeWidth={isActive ? 2.5 : 2} className={isActive ? 'drop-shadow-[0_0_10px_rgba(0,255,65,0.6)]' : ''} />
+              <span className="text-[10px] font-bold tracking-wider uppercase mt-1">{tab.label}</span>
+            </motion.button>
+          );
+        })}
+      </nav>
+    </div>
+  );
 }
 
-export default App
+export default App;
