@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 
-export function useBackgroundTracking(userId) {
+export function usePersistence(userId) {
   const [isTrackingActive, setIsTrackingActive] = useState(false);
   const [syncStatus, setSyncStatus] = useState('OFF');
   const [speed, setSpeed] = useState(0);

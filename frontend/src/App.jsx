@@ -4,14 +4,14 @@ import { Home, Map as MapIcon, Coffee } from 'lucide-react';
 import HomeScreen from './HomeScreen';
 import MapScreen from './MapScreen';
 import QueueScreen from './QueueScreen';
-import { useBackgroundTracking } from './useBackgroundTracking';
+import { usePersistence } from './usePersistence';
 import './index.css';
 
 function App() {
   const [activeTab, setActiveTab] = useState('home');
   const [modalCtx, setModalCtx] = useState(null);
   
-  const { isTrackingActive, toggleTracking, syncStatus } = useBackgroundTracking('user123');
+  const { isTrackingActive, toggleTracking, syncStatus } = usePersistence('user123');
 
   const handleSetTab = (tab, ctx = null) => {
     setModalCtx(ctx);

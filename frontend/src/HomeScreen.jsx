@@ -85,7 +85,7 @@ const HomeScreen = ({ setActiveTab, userId = 'user_demo', ticketActive, setTicke
           onClick={setTicketActive}
           className={`relative z-10 w-full h-12 rounded-full font-black uppercase tracking-widest transition-colors text-sm shadow-xl ${ticketActive ? 'bg-danger/20 text-danger border border-danger/50' : 'bg-primary text-black'}`}
         >
-          {ticketActive ? 'Deactivate Ticket' : 'Activate Ticket'}
+          {ticketActive ? 'STOP SYNC' : 'START SYNC'}
         </motion.button>
       </motion.div>
 
