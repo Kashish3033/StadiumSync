@@ -17,7 +17,7 @@ const QueueScreen = ({ userId = 'user_demo' }) => {
     let intervalId;
     const fetchStatus = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:5000/api/queue/status?user_id=${userId}&stall_id=${stallId}`);
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:5000'}/api/queue/status?user_id=${userId}&stall_id=${stallId}`);
         if (response.ok) {
           const data = await response.json();
           if (data.status === 'in_queue') {
@@ -41,7 +41,7 @@ const QueueScreen = ({ userId = 'user_demo' }) => {
 
   const joinQueue = async () => {
     try {
-      await fetch(`http://127.0.0.1:5000/api/queue/join`, {
+      await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:5000'}/api/queue/join`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ user_id: userId, stall_id: stallId })
@@ -54,7 +54,7 @@ const QueueScreen = ({ userId = 'user_demo' }) => {
 
   const advanceQueue = async () => {
     try {
-      await fetch(`http://127.0.0.1:5000/api/queue/advance`, {
+      await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:5000'}/api/queue/advance`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ stall_id: stallId })

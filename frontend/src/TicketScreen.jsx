@@ -13,7 +13,7 @@ const TicketScreen = ({ userId = 'user_demo' }) => {
 
   const fetchStatus = async () => {
     try {
-      const response = await fetch(`http://127.0.0.1:5000/api/ticket/status?user_id=${userId}`);
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:5000'}/api/ticket/status?user_id=${userId}`);
       const data = await response.json();
       setStatus(data.status || 'INACTIVE');
     } catch (error) {
@@ -30,7 +30,7 @@ const TicketScreen = ({ userId = 'user_demo' }) => {
   const updateLocation = async () => {
     setLoading(true);
     try {
-      await fetch(`http://127.0.0.1:5000/api/location/update`, {
+      await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:5000'}/api/location/update`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ user_id: userId })

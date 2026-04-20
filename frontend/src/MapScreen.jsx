@@ -31,7 +31,7 @@ const MapScreen = ({ userId = 'user_demo' }) => {
   // Fetch Heatmap on interval
   useEffect(() => {
     const fetchHeatmap = () => {
-      fetch('http://127.0.0.1:5000/api/heatmap')
+      fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:5000'}/api/heatmap`)
         .then(r => r.json())
         .then(data => {
            if (data.users) setHeatmapData(data.users);

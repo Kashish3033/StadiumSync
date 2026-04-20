@@ -92,7 +92,7 @@ export function usePersistence(userId) {
       const intervalSecs = currentSpeed > 0.5 ? 30 : 180;
       setSyncStatus(currentSpeed > 0.5 ? 'SYNC ACTIVE' : 'POWER SAVING');
       
-      fetch('http://127.0.0.1:5000/api/heartbeat', {
+      fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:5000'}/api/heartbeat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 

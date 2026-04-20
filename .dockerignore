@@ -1,0 +1,9 @@
+node_modules/
+.git
+.env
+__pycache__/
+backend/venv/
+backend/.pytest_cache/
+frontend/dist/
+Dockerfile
+.dockerignore
